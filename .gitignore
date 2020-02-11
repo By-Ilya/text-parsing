@@ -1,4 +1,4 @@
 /article-examples
 /output-data
-/node-modules/
+node_modules
 /dist
