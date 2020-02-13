@@ -1,9 +1,8 @@
 const SentenceTokenizer = require('sentence-tokenizer');
 
-const paragraphSymbol = '\n\n';
 let sentenceTokenizer = new SentenceTokenizer('Chuck');
 
-function getParagraphsFromText(text) {
+function getParagraphsFromText(text, paragraphSymbol = '\n') {
     return text.split(paragraphSymbol);
 }
 

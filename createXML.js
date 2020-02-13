@@ -26,7 +26,7 @@ fs.readFile(inputFilePath, (err, dataBuffer) => {
 
     let xmlRoot = createXmlHeader();
 
-    const paragraphs = getParagraphsFromText(data);
+    const paragraphs = getParagraphsFromText(data, '\n\n');
     paragraphs.forEach(paragraph => {
         if (paragraph) {
             let paragraphBlock = createXmlParagraph(xmlRoot);

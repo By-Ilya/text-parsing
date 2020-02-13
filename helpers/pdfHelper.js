@@ -2,7 +2,7 @@ const PARAGRAPH_FEATURES = ['.', '?', '!', '...', '..', '?!'];
 const whitespaceSymbol = ' ';
 const paragraphSymbol = '\n\n';
 
-function processTextFromPdf({ text, lastToken, lastCursorPosition, textItem }) {
+processTextFromPdf = ({ text, lastToken, lastCursorPosition, textItem }) => {
     let formattedText = text;
 
     if (lastCursorPosition !== textItem.transform[5] || !lastCursorPosition) {
@@ -19,14 +19,15 @@ function processTextFromPdf({ text, lastToken, lastCursorPosition, textItem }) {
 
     formattedText += whitespaceSymbol + textItem.str;
     return formattedText;
-}
+};
 
-function isIdentifiedNewParagraph(token) {
+isIdentifiedNewParagraph = token => {
     return PARAGRAPH_FEATURES.includes(token[token.length - 1]);
-}
+};
 
-function isIdentifiedWordHyphen(token) {
+isIdentifiedWordHyphen = token => {
     return token[token.length - 1] === '-';
-}
+};
+
 
 module.exports = processTextFromPdf;
