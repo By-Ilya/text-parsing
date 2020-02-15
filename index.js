@@ -1,7 +1,14 @@
 const path = require('path');
 const { spawn } = require('child_process');
 
-const { isFileExists } = require('./helpers/filesHelper');
+const {
+    TEMP_OUTPUT_DIR,
+    TEMP_OUTPUT_FILE
+} = require('./config');
+const {
+    isFileExists,
+    deleteFile
+} = require('./helpers/filesHelper');
 const runPdfParser = require('./pdfParser');
 const runDocxParser = require('./docxParser');
 const runTxtParser = require('./txtParser');
@@ -37,6 +44,9 @@ runParsing = async () => {
                 }
 
                 await runCreatingXmlFile(fileName, xmlFile);
+                await deleteFile(
+                    path.resolve(TEMP_OUTPUT_DIR, TEMP_OUTPUT_FILE)
+                );
                 console.log(`File ${fileName}${fileExt} parsed successfully!`);
             }
         } catch (err) {
@@ -49,24 +59,5 @@ runParsing = async () => {
     }
 };
 
-spawnDocxParser = async filePath => {
-    const resolvedFilePath = path.resolve(filePath);
-    const docxParserExec = spawn('node', [
-        'docxParser', `${resolvedFilePath}`
-    ]);
-
-    docxParserExec.stdout.pipe(process.stdout);
-    docxParserExec.stderr.pipe(process.stderr);
-
-    return new Promise((res, rej) => {
-        docxParserExec.on('close', code => {
-            if (code !== 0) {
-                console.log(`docxParser process exited with code ${code}`);
-                rej();
-            }
-            res();
-        });
-    });
-};
 
 runParsing();

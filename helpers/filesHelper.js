@@ -12,7 +12,7 @@ isFileExists = async path => {
 
 readDataBufferFromFile = async (filePath) => {
     const resolvedFilePath = path.resolve(filePath);
-    return (async() =>  {
+    return (async () =>  {
         try {
             return await fs.readFile(resolvedFilePath);
         } catch (err) {
@@ -23,7 +23,7 @@ readDataBufferFromFile = async (filePath) => {
 
 readDataFromFile = async (filePath) => {
     const resolvedFilePath = path.resolve(filePath);
-    return (async() =>  {
+    return (async () =>  {
         try {
             const dataBuffer = await fs.readFile(resolvedFilePath);
             return dataBuffer.toString();
@@ -40,4 +40,21 @@ writeDataToFile = async (filePath, data) => {
     }));
 };
 
-module.exports = { isFileExists, readDataBufferFromFile, readDataFromFile, writeDataToFile };
+deleteFile = async (filePath) => {
+    const resolvedFilePath = path.resolve(filePath);
+    return (async () => {
+        try {
+            await fs.unlink(resolvedFilePath);
+        } catch (err) {
+            throw err;
+        }
+    })();
+};
+
+module.exports = {
+    isFileExists,
+    readDataBufferFromFile,
+    readDataFromFile,
+    writeDataToFile,
+    deleteFile
+};
