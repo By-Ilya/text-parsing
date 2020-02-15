@@ -1,5 +1,4 @@
 const path = require('path');
-const { spawn } = require('child_process');
 
 const {
     TEMP_OUTPUT_DIR,
@@ -25,23 +24,7 @@ runParsing = async () => {
                 const fileName = path.basename(pathToFile, fileExt);
                 const xmlFile = `${fileName}.xml`;
 
-                switch (fileExt) {
-                    case '.pdf':
-                        await runPdfParser(pathToFile);
-                        break;
-                    case '.docx':
-                        await runDocxParser(pathToFile);
-                        break;
-                    case '.txt':
-                        await runTxtParser(pathToFile);
-                        break;
-                    case '.html':
-                        console.log('Coming soon...');
-                        break;
-                    default:
-                        console.log(`Error: ${pathToFile}: file format doesn't identified`);
-                        process.exit(0);
-                }
+                await chooseAndRunParser(fileExt, pathToFile);
 
                 await runCreatingXmlFile(fileName, xmlFile);
                 await deleteFile(
@@ -54,8 +37,28 @@ runParsing = async () => {
             process.exit(0);
         }
     } else {
-        console.log('Error: specify command argument with file path. Exiting...');
+        console.log('Error: specify command argument with file path.');
         process.exit(0);
+    }
+};
+
+chooseAndRunParser = async (fileExtName, filePath) => {
+    switch (fileExtName) {
+        case '.pdf':
+            await runPdfParser(filePath);
+            break;
+        case '.docx':
+            await runDocxParser(filePath);
+            break;
+        case '.txt':
+            await runTxtParser(filePath);
+            break;
+        case '.html':
+            console.log('Coming soon...');
+            break;
+        default:
+            console.log(`Error: ${filePath}: file format doesn't identified.`);
+            process.exit(0);
     }
 };
 
