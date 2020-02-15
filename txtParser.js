@@ -1,23 +1,27 @@
-const fs = require('fs');
 const path = require('path');
 
+const {
+    TEMP_OUTPUT_DIR,
+    TEMP_OUTPUT_FILE
+} = require('./config');
+const {
+    readDataFromFile,
+    writeDataToFile
+} = require('./helpers/filesHelper');
 const getFormattedTextFromData = require('./helpers/txtHelper');
 
-const dataPath = path.resolve(__dirname, './article-examples/txt/');
-const filePath = path.resolve(dataPath, './book2.txt');
-const outputPath = path.resolve(__dirname, './output-data/');
-
-fs.readFile(filePath, (err, dataBuffer) => {
-    if (err) {
-        console.log(err);
-        return;
+runTxtParser = async (filePath) => {
+    try {
+        let data = await readDataFromFile(filePath);
+        const formattedText = await getFormattedTextFromData(data);
+        await writeDataToFile(
+            path.resolve(TEMP_OUTPUT_DIR, TEMP_OUTPUT_FILE),
+            formattedText
+        );
+    } catch (err) {
+        throw err;
     }
+};
 
-    const data = dataBuffer.toString();
-    const formattedText = getFormattedTextFromData(data);
 
-    fs.writeFileSync(
-        path.resolve(outputPath, './output.txt'),
-        formattedText
-    );
-});
+module.exports = runTxtParser;

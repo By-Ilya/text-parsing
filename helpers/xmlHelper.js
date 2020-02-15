@@ -14,11 +14,13 @@ const XML_PROPS = {
     sentenceProps: { 'type': 'sentence' }
 };
 
-createXmlHeader = () => {
+createXmlHeader = (documentName) => {
     let xmlHeader = xmlBuilder.create(XML_PROPS.documentTag);
     xmlHeader.att(
         XML_PROPS.documentProps.attribute,
-        XML_PROPS.documentProps.defaultValue
+        documentName
+            ? documentName
+            : XML_PROPS.documentProps.defaultValue
     );
 
     return xmlHeader;
@@ -39,14 +41,9 @@ createXmlSentence = (xmlParagraph, data) => {
     );
 };
 
-createXmlFile = (fileName, data) => {
-    fs.writeFileSync(fileName, data);
-};
-
 
 module.exports = {
     createXmlHeader,
     createXmlParagraph,
-    createXmlSentence,
-    createXmlFile
+    createXmlSentence
 };

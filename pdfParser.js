@@ -1,7 +1,14 @@
 const path = require('path');
-const fs = require('fs');
 const pdfParser = require('pdf-parse');
 
+const {
+    TEMP_OUTPUT_DIR,
+    TEMP_OUTPUT_FILE
+} = require('./config');
+const {
+    readDataBufferFromFile,
+    writeDataToFile
+} = require('./helpers/filesHelper');
 const processTextFromPdf = require('./helpers/pdfHelper');
 
 const renderOptions = {
@@ -9,7 +16,7 @@ const renderOptions = {
     disableCombineTextItems: false
 };
 
-renderPage = (pageData) => {
+renderPage = async (pageData) => {
     return pageData.getTextContent(renderOptions)
         .then(function(textContent) {
             let lastCursorPosition;
@@ -32,18 +39,23 @@ renderPage = (pageData) => {
         });
 };
 
-const dataPath = path.resolve(__dirname, './article-examples/pdf/');
-const filePath = path.resolve(dataPath, './hierarchial-crf-for-da-tagging.pdf');
-const outputPath = path.resolve(__dirname, './output-data/');
-
 const parserOptions = {
     pagerender: renderPage
 };
 
-let dataBuffer = fs.readFileSync(filePath);
-pdfParser(dataBuffer, parserOptions).then((data) => {
-    fs.writeFileSync(
-        path.resolve(outputPath, './output.txt'),
-        data.text
-    );
-});
+runPdfParser = async (filePath) => {
+    try {
+        let dataBuffer = await readDataBufferFromFile(filePath);
+        await pdfParser(dataBuffer, parserOptions).then(async (data) => {
+            await writeDataToFile(
+                path.resolve(TEMP_OUTPUT_DIR, TEMP_OUTPUT_FILE),
+                data.text
+            );
+        });
+    } catch (err) {
+        throw err;
+    }
+};
+
+
+module.exports = runPdfParser;

@@ -1,30 +1,31 @@
-const fs = require('fs');
 const path = require('path');
 
+const {
+    TEMP_OUTPUT_DIR,
+    TEMP_OUTPUT_FILE
+} = require('./config');
+const {
+    readDataFromFile,
+    writeDataToFile
+} = require('./helpers/filesHelper');
 const {
     getParagraphsFromText,
     getSentencesFromText
 } = require('./helpers/nlpHelper');
-
 const {
     createXmlHeader,
     createXmlParagraph,
-    createXmlSentence,
-    createXmlFile
+    createXmlSentence
 } = require('./helpers/xmlHelper');
 
-const inputFilePath = path.resolve(__dirname, './output-data/output.txt');
-const outputXmlPath = path.resolve(__dirname, './output-data/document.xml');
+runCreatingXmlFile = async (documentName, outputXmlPath) => {
+    const inputFilePath = path.resolve(
+        TEMP_OUTPUT_DIR,
+        TEMP_OUTPUT_FILE
+    );
+    let data = await readDataFromFile(inputFilePath);
 
-fs.readFile(inputFilePath, (err, dataBuffer) => {
-    if (err) {
-        console.log(err);
-        return;
-    }
-
-    const data = dataBuffer.toString();
-
-    let xmlRoot = createXmlHeader();
+    let xmlRoot = createXmlHeader(documentName);
 
     const paragraphs = getParagraphsFromText(data, '\n\n');
     paragraphs.forEach(paragraph => {
@@ -39,6 +40,12 @@ fs.readFile(inputFilePath, (err, dataBuffer) => {
         }
     });
 
-    let xml = xmlRoot.end({ pretty: true });
-    createXmlFile(outputXmlPath, xml);
-});
+    let xml = xmlRoot.end({pretty: true});
+    await writeDataToFile(
+        path.resolve(TEMP_OUTPUT_DIR, outputXmlPath),
+        xml
+    );
+};
+
+
+module.exports = runCreatingXmlFile;

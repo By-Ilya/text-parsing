@@ -1,14 +1,26 @@
-const fs = require('fs');
 const path = require('path');
 const docxParser = require('docx-parser');
 
-const dataPath = path.resolve(__dirname, './article-examples/docx/');
-const fileName = path.resolve(dataPath, './report.docx');
-const outputPath = path.resolve(__dirname, './output-data/');
+const {
+   TEMP_OUTPUT_DIR,
+   TEMP_OUTPUT_FILE
+} = require('./config');
+const { writeDataToFile } = require('./helpers/filesHelper');
 
-docxParser.parseDocx(fileName, (data) => {
-   fs.writeFileSync(
-       path.resolve(outputPath, './output.txt'),
-       data
-   );
-});
+runDocxParser = async (filePath) => {
+   try {
+      let docxData = '';
+      docxParser.parseDocx(filePath, async (data) => {
+         docxData = data;
+      });
+
+      await writeDataToFile(
+          path.resolve(TEMP_OUTPUT_DIR, TEMP_OUTPUT_FILE),
+          docxData
+      );
+   } catch (err) {
+      throw err;
+   }
+};
+
+module.exports = runDocxParser;
