@@ -1,37 +1,24 @@
 const path = require('path');
-const docxParser = require('docx-parser');
+const mammoth = require("mammoth");
 
 const {
    TEMP_OUTPUT_DIR,
    TEMP_OUTPUT_FILE
 } = require('./config');
-const {
-   isFileExists,
-   writeDataToFile
-} = require('./helpers/filesHelper');
+const getFormattedTextFromData = require('./helpers/getFormattedData');
+const { writeDataToFile } = require('./helpers/filesHelper');
 
-const args = process.argv.slice(2);
-
-runDocxParser = async () => {
+runDocxParser = async (filePath) => {
    try {
-      if (args.length > 0) {
-         const filePath = args[0];
-         if (await isFileExists(filePath)) {
-            docxParser.parseDocx(filePath,  async (data) => {
-               await writeDataToFile(
-                   path.resolve(TEMP_OUTPUT_DIR, TEMP_OUTPUT_FILE),
-                   data
-               );
-            });
-            process.exit(0);
-         }
-      } else {
-         console.log('Error: specify command argument with file path.');
-         process.exit(0);
-      }
+      const text = (await mammoth.extractRawText({path: filePath})).value;
+      await writeDataToFile(
+          path.resolve(TEMP_OUTPUT_DIR, TEMP_OUTPUT_FILE),
+          getFormattedTextFromData(text)
+      );
    } catch (err) {
       throw err;
    }
 };
 
-runDocxParser();
+
+module.exports = runDocxParser;

@@ -8,15 +8,14 @@ const {
     readDataFromFile,
     writeDataToFile
 } = require('./helpers/filesHelper');
-const getFormattedTextFromData = require('./helpers/txtHelper');
+const getFormattedTextFromData = require('./helpers/getFormattedData');
 
 runTxtParser = async (filePath) => {
     try {
         let data = await readDataFromFile(filePath);
-        const formattedText = await getFormattedTextFromData(data);
         await writeDataToFile(
             path.resolve(TEMP_OUTPUT_DIR, TEMP_OUTPUT_FILE),
-            formattedText
+            getFormattedTextFromData(data)
         );
     } catch (err) {
         throw err;

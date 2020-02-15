@@ -3,6 +3,7 @@ const { spawn } = require('child_process');
 
 const { isFileExists } = require('./helpers/filesHelper');
 const runPdfParser = require('./pdfParser');
+const runDocxParser = require('./docxParser');
 const runTxtParser = require('./txtParser');
 const runCreatingXmlFile = require('./createXML');
 
@@ -22,7 +23,7 @@ runParsing = async () => {
                         await runPdfParser(pathToFile);
                         break;
                     case '.docx':
-                        await Promise.all([spawnDocxParser(pathToFile)]);
+                        await runDocxParser(pathToFile);
                         break;
                     case '.txt':
                         await runTxtParser(pathToFile);
