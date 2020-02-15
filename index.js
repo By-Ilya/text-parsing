@@ -1,8 +1,8 @@
-const fs = require('fs');
 const path = require('path');
+const { spawn } = require('child_process');
 
+const { isFileExists } = require('./helpers/filesHelper');
 const runPdfParser = require('./pdfParser');
-const runDocxParser = require('./docxParser');
 const runTxtParser = require('./txtParser');
 const runCreatingXmlFile = require('./createXML');
 
@@ -12,22 +12,20 @@ runParsing = async () => {
     if (args.length > 0) {
         try {
             const pathToFile = args[0];
-            if (isFileExists(pathToFile)) {
+            if (await isFileExists(pathToFile)) {
                 const fileExt = path.extname(pathToFile);
                 const fileName = path.basename(pathToFile, fileExt);
                 const xmlFile = `${fileName}.xml`;
+
                 switch (fileExt) {
                     case '.pdf':
                         await runPdfParser(pathToFile);
-                        await runCreatingXmlFile(fileName, xmlFile);
                         break;
                     case '.docx':
-                        await runDocxParser(pathToFile);
-                        await runCreatingXmlFile(fileName, xmlFile);
+                        await Promise.all([spawnDocxParser(pathToFile)]);
                         break;
                     case '.txt':
                         await runTxtParser(pathToFile);
-                        await runCreatingXmlFile(fileName, xmlFile);
                         break;
                     case '.html':
                         console.log('Coming soon...');
@@ -36,25 +34,38 @@ runParsing = async () => {
                         console.log(`Error: ${pathToFile}: file format doesn't identified`);
                         process.exit(0);
                 }
+
+                await runCreatingXmlFile(fileName, xmlFile);
+                console.log(`File ${fileName}${fileExt} parsed successfully!`);
             }
         } catch (err) {
             console.log(err);
             process.exit(0);
         }
     } else {
-        console.log('Error: please, specify path to file!');
-        console.log(`Run again with command: npm start 'pathToFile'`);
-        console.log('Exiting...');
+        console.log('Error: specify command argument with file path. Exiting...');
         process.exit(0);
-    };
+    }
 };
 
-isFileExists = path => {
-    fs.access(path, fs.F_OK, (err) => {
-        if (err) throw err;
+spawnDocxParser = async filePath => {
+    const resolvedFilePath = path.resolve(filePath);
+    const docxParserExec = spawn('node', [
+        'docxParser', `${resolvedFilePath}`
+    ]);
+
+    docxParserExec.stdout.pipe(process.stdout);
+    docxParserExec.stderr.pipe(process.stderr);
+
+    return new Promise((res, rej) => {
+        docxParserExec.on('close', code => {
+            if (code !== 0) {
+                console.log(`docxParser process exited with code ${code}`);
+                rej();
+            }
+            res();
+        });
     });
-    return true;
 };
-
 
 runParsing();

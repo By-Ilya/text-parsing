@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "child_process": "1.0.2",
     "pdf-parse": "1.1.1",
     "docx-parser": "0.2.1",
     "sentence-tokenizer": "1.0.1",

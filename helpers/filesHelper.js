@@ -1,6 +1,15 @@
 const fs = require('fs').promises;
 const path = require('path');
 
+isFileExists = async path => {
+    try {
+        await fs.access(path, fs.F_OK);
+        return true;
+    } catch (err) {
+        throw err;
+    }
+};
+
 readDataBufferFromFile = async (filePath) => {
     const resolvedFilePath = path.resolve(filePath);
     return (async() =>  {
@@ -31,4 +40,4 @@ writeDataToFile = async (filePath, data) => {
     }));
 };
 
-module.exports = { readDataBufferFromFile, readDataFromFile, writeDataToFile };
+module.exports = { isFileExists, readDataBufferFromFile, readDataFromFile, writeDataToFile };
