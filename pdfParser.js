@@ -2,8 +2,8 @@ const path = require('path');
 const pdfParser = require('pdf-parse');
 
 const {
-    TEMP_OUTPUT_DIR,
-    TEMP_OUTPUT_FILE
+    OUTPUT_DIR,
+    OUTPUT_FILE
 } = require('./config');
 const {
     readDataBufferFromFile,
@@ -48,7 +48,7 @@ runPdfParser = async (filePath) => {
         let dataBuffer = await readDataBufferFromFile(filePath);
         await pdfParser(dataBuffer, parserOptions).then(async (data) => {
             await writeDataToFile(
-                path.resolve(TEMP_OUTPUT_DIR, TEMP_OUTPUT_FILE),
+                path.resolve(OUTPUT_DIR, OUTPUT_FILE),
                 data.text
             );
         });

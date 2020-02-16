@@ -11,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "child_process": "1.0.2",
+    "request": "2.88.2",
+    "cheerio": "1.0.0-rc.3",
     "pdf-parse": "1.1.1",
     "mammoth": "1.4.9",
     "sentence-tokenizer": "1.0.1",
