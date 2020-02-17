@@ -30,6 +30,10 @@ output file name. `./output-data/` and `output.txt` is configured as a default v
 (absolute or relative path) and `<urlPath>` is HTTP(s) url to HTML-site.
 5. See the result `.xml` file in the `OUTPUT_DIR` directory.
 
+#### Examples of running commands
+- parsing file: `npm start ./article-examples/pdf/da-tagging.pdf`
+- parsing site: `npm start https://habr.com/ru/post/488540/`
+
 ## Used `NodeJS` libraries
 - `request` (version `2.88.2`) is used for making HTTP(s)-queries;
 - `cheerio` (version `1.0.0-rc.3`) is used for parsing HTML data;
