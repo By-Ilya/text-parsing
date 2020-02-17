@@ -9,13 +9,13 @@ Parse different documents, extract and format text, and create unified `.xml` fi
 
 ## Parsed XML file structure
     <?xml version="1.0"?>
-        <document name="documentNameOrLink">
-            <block type="paragraph">
-                <block type="sentence">...</block>
-                ...
-            </block>
+    <document name="documentNameOrLink">
+        <block type="paragraph">
+            <block type="sentence">...</block>
             ...
-        </document>
+        </block>
+        ...
+    </document>
 
 ## Requirements
 1. `NodeJS` library and `NPM` package manager.
