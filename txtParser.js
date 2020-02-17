@@ -2,7 +2,7 @@ const path = require('path');
 
 const {
     OUTPUT_DIR,
-    OUTPUT_FILE
+    TEMP_OUTPUT_FILE
 } = require('./config');
 const {
     readDataFromFile,
@@ -14,7 +14,7 @@ runTxtParser = async (filePath) => {
     try {
         let data = await readDataFromFile(filePath);
         await writeDataToFile(
-            path.resolve(OUTPUT_DIR, OUTPUT_FILE),
+            path.resolve(OUTPUT_DIR, TEMP_OUTPUT_FILE),
             getFormattedTextFromData(data)
         );
     } catch (err) {

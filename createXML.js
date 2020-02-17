@@ -2,7 +2,7 @@ const path = require('path');
 
 const {
     OUTPUT_DIR,
-    OUTPUT_FILE
+    TEMP_OUTPUT_FILE
 } = require('./config');
 const {
     readDataFromFile,
@@ -21,7 +21,7 @@ const {
 runCreatingXmlFile = async (documentName, outputXmlPath) => {
     const inputFilePath = path.resolve(
         OUTPUT_DIR,
-        OUTPUT_FILE
+        TEMP_OUTPUT_FILE
     );
     let data = await readDataFromFile(inputFilePath);
 

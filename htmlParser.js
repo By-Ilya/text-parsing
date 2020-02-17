@@ -4,7 +4,7 @@ const path = require('path');
 
 const {
     OUTPUT_DIR,
-    OUTPUT_FILE
+    TEMP_OUTPUT_FILE
 } = require('./config');
 const getFormattedTextFromData = require('./helpers/getFormattedData');
 const { writeDataToFile } = require('./helpers/filesHelper');
@@ -17,7 +17,7 @@ runHtmlParser = async (urlPath) => {
         const text = pageContent('body').text();
 
         await writeDataToFile(
-            path.resolve(OUTPUT_DIR, OUTPUT_FILE),
+            path.resolve(OUTPUT_DIR, TEMP_OUTPUT_FILE),
             getFormattedTextFromData(text)
         );
     } catch (err) {

@@ -2,7 +2,7 @@ const path = require('path');
 
 const {
     OUTPUT_DIR,
-    OUTPUT_FILE
+    TEMP_OUTPUT_FILE
 } = require('./config');
 const {
     isFileExists,
@@ -28,7 +28,7 @@ runParsing = async () => {
                     'htmlParsedData.xml'
                 );
                 await deleteFile(
-                    path.resolve(OUTPUT_DIR, OUTPUT_FILE)
+                    path.resolve(OUTPUT_DIR, TEMP_OUTPUT_FILE)
                 );
                 console.log(`Site ${pathToFile} parsed successfully!`);
                 process.exit(0);
@@ -43,7 +43,7 @@ runParsing = async () => {
 
                 await runCreatingXmlFile(fileName, xmlFile);
                 await deleteFile(
-                    path.resolve(OUTPUT_DIR, OUTPUT_FILE)
+                    path.resolve(OUTPUT_DIR, TEMP_OUTPUT_FILE)
                 );
                 console.log(`File ${fileName}${fileExt} parsed successfully!`);
                 process.exit(0);
